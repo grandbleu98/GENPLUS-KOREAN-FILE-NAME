@@ -570,7 +570,7 @@ typedef struct
   INT32   TAL;            /* timer a base         */
   INT32   TAC;            /* timer a counter      */
   INT32   TB;             /* timer b value        */
-  INT32   TBL;            /* timer b base         */
+  INT32   timer_b_load;            /* timer b base         */
   INT32   TBC;            /* timer b counter      */
   INT32   dt_tab[8][32];  /* DeTune table         */
 
@@ -814,7 +814,7 @@ INLINE void INTERNAL_TIMER_B(int step)
       /* reload the counter */
       do
       {
-        ym2612.OPN.ST.TBC += ym2612.OPN.ST.TBL;
+        ym2612.OPN.ST.TBC += ym2612.OPN.ST.timer_b_load;
       }
       while (ym2612.OPN.ST.TBC <= 0);
     }
@@ -854,7 +854,7 @@ INLINE void set_timers(int v )
   if ((v&1) && !(ym2612.OPN.ST.mode&1))
     ym2612.OPN.ST.TAC = ym2612.OPN.ST.TAL;
   if ((v&2) && !(ym2612.OPN.ST.mode&2))
-    ym2612.OPN.ST.TBC = ym2612.OPN.ST.TBL;
+    ym2612.OPN.ST.TBC = ym2612.OPN.ST.timer_b_load;
   
   /* reset Timers flags */
   ym2612.OPN.ST.status &= (~v >> 4); 
@@ -1547,7 +1547,7 @@ INLINE void OPNWriteMode(int r, int v)
       break;
     case 0x26:  /* timer B */
       ym2612.OPN.ST.TB = v;
-      ym2612.OPN.ST.TBL = (256 - v) << 4;
+      ym2612.OPN.ST.timer_b_load = (256 - v) << 4;
       break;
     case 0x27:  /* mode, timer control */
       set_timers(v);
@@ -1932,7 +1932,7 @@ void YM2612ResetChip(void)
  
   set_timers(0x30);
   ym2612.OPN.ST.TB = 0;
-  ym2612.OPN.ST.TBL = 256 << 4;
+  ym2612.OPN.ST.timer_b_load = 256 << 4;
   ym2612.OPN.ST.TA = 0;
   ym2612.OPN.ST.TAL = 1024;
 
