@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: devkitpro/devkitppc:latest
+    container: devkitpro/devkitppc:20240530
 
     steps:
       - name: Checkout source
