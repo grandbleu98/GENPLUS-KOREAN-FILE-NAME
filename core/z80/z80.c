@@ -858,7 +858,7 @@ INLINE UINT8 INC(UINT8 value)
 /***************************************************************
  * DEC  r8
  ***************************************************************/
-INLINE UINT8 DEC(UINT8 value)
+INLINE UINT8 Z80_DEC(UINT8 value)
 {
   UINT8 res = value - 1;
   F = (F & CF) | SZHV_dec[res];
@@ -2102,7 +2102,7 @@ OP(dd,21) { IX = ARG16();                                     } /* LD   IX,w    
 OP(dd,22) { EA = ARG16(); WM16( EA, &Z80.ix ); WZ = EA+1;     } /* LD   (w),IX   */
 OP(dd,23) { IX++;                                             } /* INC  IX       */
 OP(dd,24) { HX = INC(HX);                                     } /* INC  HX       */
-OP(dd,25) { HX = DEC(HX);                                     } /* DEC  HX       */
+OP(dd,25) { HX = Z80_DEC(HX);                                     } /* DEC  HX       */
 OP(dd,26) { HX = ARG();                                       } /* LD   HX,n     */
 OP(dd,27) { illegal_1(); op_27();                             } /* DB   DD       */
 
@@ -2111,7 +2111,7 @@ OP(dd,29) { ADD16(ix,ix);                                     } /* ADD  IX,IX   
 OP(dd,2a) { EA = ARG16(); RM16( EA, &Z80.ix ); WZ = EA+1;     } /* LD   IX,(w)   */
 OP(dd,2b) { IX--;                                             } /* DEC  IX       */
 OP(dd,2c) { LX = INC(LX);                                     } /* INC  LX       */
-OP(dd,2d) { LX = DEC(LX);                                     } /* DEC  LX       */
+OP(dd,2d) { LX = Z80_DEC(LX);                                     } /* DEC  LX       */
 OP(dd,2e) { LX = ARG();                                       } /* LD   LX,n     */
 OP(dd,2f) { illegal_1(); op_2f();                             } /* DB   DD       */
 
@@ -2120,7 +2120,7 @@ OP(dd,31) { illegal_1(); op_31();                             } /* DB   DD      
 OP(dd,32) { illegal_1(); op_32();                             } /* DB   DD       */
 OP(dd,33) { illegal_1(); op_33();                             } /* DB   DD       */
 OP(dd,34) { EAX; WM( EA, INC(RM(EA)) );                       } /* INC  (IX+o)   */
-OP(dd,35) { EAX; WM( EA, DEC(RM(EA)) );                       } /* DEC  (IX+o)   */
+OP(dd,35) { EAX; WM( EA, Z80_DEC(RM(EA)) );                       } /* DEC  (IX+o)   */
 OP(dd,36) { EAX; WM( EA, ARG() );                             } /* LD   (IX+o),n */
 OP(dd,37) { illegal_1(); op_37();                             } /* DB   DD       */
 
@@ -2393,7 +2393,7 @@ OP(fd,21) { IY = ARG16();                                     } /* LD   IY,w    
 OP(fd,22) { EA = ARG16(); WM16( EA, &Z80.iy ); WZ = EA+1;     } /* LD   (w),IY   */
 OP(fd,23) { IY++;                                             } /* INC  IY       */
 OP(fd,24) { HY = INC(HY);                                     } /* INC  HY       */
-OP(fd,25) { HY = DEC(HY);                                     } /* DEC  HY       */
+OP(fd,25) { HY = Z80_DEC(HY);                                     } /* DEC  HY       */
 OP(fd,26) { HY = ARG();                                       } /* LD   HY,n     */
 OP(fd,27) { illegal_1(); op_27();                             } /* DB   FD       */
 
@@ -2402,7 +2402,7 @@ OP(fd,29) { ADD16(iy,iy);                                     } /* ADD  IY,IY   
 OP(fd,2a) { EA = ARG16(); RM16( EA, &Z80.iy ); WZ = EA+1;     } /* LD   IY,(w)   */
 OP(fd,2b) { IY--;                                             } /* DEC  IY       */
 OP(fd,2c) { LY = INC(LY);                                     } /* INC  LY       */
-OP(fd,2d) { LY = DEC(LY);                                     } /* DEC  LY       */
+OP(fd,2d) { LY = Z80_DEC(LY);                                     } /* DEC  LY       */
 OP(fd,2e) { LY = ARG();                                       } /* LD   LY,n     */
 OP(fd,2f) { illegal_1(); op_2f();                             } /* DB   FD       */
 
@@ -2411,7 +2411,7 @@ OP(fd,31) { illegal_1(); op_31();                             } /* DB   FD      
 OP(fd,32) { illegal_1(); op_32();                             } /* DB   FD       */
 OP(fd,33) { illegal_1(); op_33();                             } /* DB   FD       */
 OP(fd,34) { EAY; WM( EA, INC(RM(EA)) );                       } /* INC  (IY+o)   */
-OP(fd,35) { EAY; WM( EA, DEC(RM(EA)) );                       } /* DEC  (IY+o)   */
+OP(fd,35) { EAY; WM( EA, Z80_DEC(RM(EA)) );                       } /* DEC  (IY+o)   */
 OP(fd,36) { EAY; WM( EA, ARG() );                             } /* LD   (IY+o),n */
 OP(fd,37) { illegal_1(); op_37();                             } /* DB   FD       */
 
@@ -2948,7 +2948,7 @@ OP(op,01) { BC = ARG16();                                                       
 OP(op,02) { WM( BC, A ); WZ_L = (BC + 1) & 0xFF;  WZ_H = A;                                                } /* LD   (BC),A      */
 OP(op,03) { BC++;                                                                                          } /* INC  BC          */
 OP(op,04) { B = INC(B);                                                                                    } /* INC  B           */
-OP(op,05) { B = DEC(B);                                                                                    } /* DEC  B           */
+OP(op,05) { B = Z80_DEC(B);                                                                                    } /* DEC  B           */
 OP(op,06) { B = ARG();                                                                                     } /* LD   B,n         */
 OP(op,07) { RLCA;                                                                                          } /* RLCA             */
 
@@ -2957,7 +2957,7 @@ OP(op,09) { ADD16(hl, bc);                                                      
 OP(op,0a) { A = RM( BC ); WZ=BC+1;                                                                         } /* LD   A,(BC)      */
 OP(op,0b) { BC--;                                                                                          } /* DEC  BC          */
 OP(op,0c) { C = INC(C);                                                                                    } /* INC  C           */
-OP(op,0d) { C = DEC(C);                                                                                    } /* DEC  C           */
+OP(op,0d) { C = Z80_DEC(C);                                                                                    } /* DEC  C           */
 OP(op,0e) { C = ARG();                                                                                     } /* LD   C,n         */
 OP(op,0f) { RRCA;                                                                                          } /* RRCA             */
 
@@ -2966,7 +2966,7 @@ OP(op,11) { DE = ARG16();                                                       
 OP(op,12) { WM( DE, A ); WZ_L = (DE + 1) & 0xFF;  WZ_H = A;                                                } /* LD   (DE),A      */
 OP(op,13) { DE++;                                                                                          } /* INC  DE          */
 OP(op,14) { D = INC(D);                                                                                    } /* INC  D           */
-OP(op,15) { D = DEC(D);                                                                                    } /* DEC  D           */
+OP(op,15) { D = Z80_DEC(D);                                                                                    } /* DEC  D           */
 OP(op,16) { D = ARG();                                                                                     } /* LD   D,n         */
 OP(op,17) { RLA;                                                                                           } /* RLA              */
 
@@ -2975,7 +2975,7 @@ OP(op,19) { ADD16(hl, de);                                                      
 OP(op,1a) { A = RM( DE ); WZ=DE+1;                                                                         } /* LD   A,(DE)      */
 OP(op,1b) { DE--;                                                                                          } /* DEC  DE          */
 OP(op,1c) { E = INC(E);                                                                                    } /* INC  E           */
-OP(op,1d) { E = DEC(E);                                                                                    } /* DEC  E           */
+OP(op,1d) { E = Z80_DEC(E);                                                                                    } /* DEC  E           */
 OP(op,1e) { E = ARG();                                                                                     } /* LD   E,n         */
 OP(op,1f) { RRA;                                                                                           } /* RRA              */
 
@@ -2984,7 +2984,7 @@ OP(op,21) { HL = ARG16();                                                       
 OP(op,22) { EA = ARG16(); WM16( EA, &Z80.hl ); WZ = EA+1;                                                  } /* LD   (w),HL      */
 OP(op,23) { HL++;                                                                                          } /* INC  HL          */
 OP(op,24) { H = INC(H);                                                                                    } /* INC  H           */
-OP(op,25) { H = DEC(H);                                                                                    } /* DEC  H           */
+OP(op,25) { H = Z80_DEC(H);                                                                                    } /* DEC  H           */
 OP(op,26) { H = ARG();                                                                                     } /* LD   H,n         */
 OP(op,27) { DAA;                                                                                           } /* DAA              */
 
@@ -2993,7 +2993,7 @@ OP(op,29) { ADD16(hl, hl);                                                      
 OP(op,2a) { EA = ARG16(); RM16( EA, &Z80.hl ); WZ = EA+1;                                                  } /* LD   HL,(w)      */
 OP(op,2b) { HL--;                                                                                          } /* DEC  HL          */
 OP(op,2c) { L = INC(L);                                                                                    } /* INC  L           */
-OP(op,2d) { L = DEC(L);                                                                                    } /* DEC  L           */
+OP(op,2d) { L = Z80_DEC(L);                                                                                    } /* DEC  L           */
 OP(op,2e) { L = ARG();                                                                                     } /* LD   L,n         */
 OP(op,2f) { A ^= 0xff; F = (F&(SF|ZF|PF|CF))|HF|NF|(A&(YF|XF));                                            } /* CPL              */
 
@@ -3002,7 +3002,7 @@ OP(op,31) { SP = ARG16();                                                       
 OP(op,32) { EA = ARG16(); WM( EA, A ); WZ_L=(EA+1)&0xFF;WZ_H=A;                                            } /* LD   (w),A       */
 OP(op,33) { SP++;                                                                                          } /* INC  SP          */
 OP(op,34) { WM( HL, INC(RM(HL)) );                                                                         } /* INC  (HL)        */
-OP(op,35) { WM( HL, DEC(RM(HL)) );                                                                         } /* DEC  (HL)        */
+OP(op,35) { WM( HL, Z80_DEC(RM(HL)) );                                                                         } /* DEC  (HL)        */
 OP(op,36) { WM( HL, ARG() );                                                                               } /* LD   (HL),n      */
 OP(op,37) { F = (F & (SF|ZF|YF|XF|PF)) | CF | (A & (YF|XF));                                               } /* SCF              */
 
@@ -3011,7 +3011,7 @@ OP(op,39) { ADD16(hl, sp);                                                      
 OP(op,3a) { EA = ARG16(); A = RM( EA ); WZ = EA+1;                                                         } /* LD   A,(w)       */
 OP(op,3b) { SP--;                                                                                          } /* DEC  SP          */
 OP(op,3c) { A = INC(A);                                                                                    } /* INC  A           */
-OP(op,3d) { A = DEC(A);                                                                                    } /* DEC  A           */
+OP(op,3d) { A = Z80_DEC(A);                                                                                    } /* DEC  A           */
 OP(op,3e) { A = ARG();                                                                                     } /* LD   A,n         */
 OP(op,3f) { F = ((F&(SF|ZF|YF|XF|PF|CF))|((F&CF)<<4)|(A&(YF|XF)))^CF;                                      } /* CCF              */
 
